@@ -1,6 +1,7 @@
 .app {
   min-height: 100vh;
   padding: 20px;
+  padding-bottom: 80px; /* Space for bottom nav on mobile */
 }
 
 .app-header {
@@ -16,24 +17,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-}
-
-.menu-toggle {
-  display: none;
-  position: relative;
-  left: 0;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  backdrop-filter: blur(10px);
-  margin-right: 15px;
-  margin-left: 0px;
-}
-
-.menu-toggle:hover {
-  background: rgba(255, 255, 255, 0.3);
 }
 
 .header-title {
@@ -107,120 +90,61 @@
   margin: -15px auto 0;
 }
 
-/* Mobile Sidebar Styles */
-.sidebar {
+/* Mobile Bottom Navigation */
+.bottom-nav {
+  display: none;
   position: fixed;
-  top: 0;
-  left: -280px;
-  width: 280px;
-  height: 100vh;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: rgba(45, 55, 72, 0.98);
   backdrop-filter: blur(10px);
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
-  overflow-y: auto;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
 }
 
-.sidebar.open {
-  left: 0;
-}
-
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 999;
-  touch-action: pan-y;
-}
-
-.sidebar-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  padding-top: calc(20px + env(safe-area-inset-top, 0px));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-header h2 {
-  color: #48bb78;
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.close-btn {
-  background: transparent;
-  color: white;
-  font-size: 1.8rem;
-  padding: 5px 10px;
-  line-height: 1;
-  min-width: 44px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  color: #48bb78;
-}
-
-.sidebar-nav {
+.bottom-nav button {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-}
-
-.sidebar-nav button {
-  display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 15px 20px;
+  justify-content: center;
+  padding: 6px 4px;
   background: transparent;
-  color: #e8eaed;
+  color: #cbd5e0;
   border-radius: 8px;
-  font-size: 1rem;
-  text-align: left;
-  margin-bottom: 5px;
+  font-size: 0.7rem;
   transition: all 0.3s ease;
-  min-height: 48px;
-  touch-action: manipulation;
+  min-height: 56px;
+  gap: 2px;
 }
 
-.sidebar-nav button:hover {
+.bottom-nav button:hover {
   background: rgba(72, 187, 120, 0.2);
-  transform: translateX(5px);
 }
 
-.sidebar-nav button.active {
+.bottom-nav button.active {
   background: rgba(72, 187, 120, 0.3);
   color: #48bb78;
-  font-weight: 600;
 }
 
-.nav-icon {
-  font-size: 1.3rem;
-  width: 25px;
-  text-align: center;
+.bottom-nav .nav-icon {
+  font-size: 1.4rem;
+}
+
+.bottom-nav .nav-label {
+  font-size: 0.65rem;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
   .app {
     padding: 15px;
     padding-top: calc(15px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
   
   .app-header {
@@ -245,22 +169,12 @@
     filter: drop-shadow(0 5px 15px rgba(0,0,0,1)) drop-shadow(0 0 10px rgba(255,255,255,0.5)) brightness(1.1) contrast(1.1);
   }
   
-  .menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 10px;
-    left: 5px;
-  }
-  
-  .header-content {
-    padding-left: 40px;
-  }
-  
   .desktop-nav {
     display: none;
+  }
+  
+  .bottom-nav {
+    display: grid;
   }
   
   .nav-menu {
@@ -270,11 +184,6 @@
   .nav-menu button {
     padding: 8px 15px;
     font-size: 0.85rem;
-  }
-  
-  /* Prevent body scroll when sidebar is open */
-  body.sidebar-open {
-    overflow: hidden;
   }
 }
 
