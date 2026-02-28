@@ -71,7 +71,7 @@
 
 .course-row {
   display: grid;
-  grid-template-columns: 30px 2fr 1fr 1fr 60px 40px;
+  grid-template-columns: 30px 2fr 1fr 1fr 80px 60px 40px;
   gap: 10px;
   align-items: center;
   margin-bottom: 12px;
@@ -89,6 +89,31 @@
   padding: 10px;
   border-radius: 6px;
   font-size: 0.95rem;
+}
+
+.marks-input {
+  background: rgba(52, 152, 219, 0.1);
+  border: 2px solid #3498db !important;
+}
+
+.dark .marks-input {
+  background: rgba(52, 152, 219, 0.2);
+  border-color: #3498db !important;
+}
+
+.grade-display {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.15);
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.dark .grade-display {
+  color: #48bb78;
+  background: rgba(72, 187, 120, 0.2);
 }
 
 .grade-point {
@@ -158,6 +183,10 @@
   
   .course-number {
     display: none;
+  }
+  
+  .grade-display {
+    font-size: 1rem;
   }
   
   .gpa-value {

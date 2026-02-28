@@ -114,7 +114,7 @@ export const calculateRequiredGPA = (
  */
 export const getAcademicClass = (cgpa: number, gradingScale: number): { class: string; color: string } => {
   if (gradingScale === 5.0) {
-    // 5.0 scale classification - Using high contrast colors for visibility
+    // 5.0 scale classification
     if (cgpa >= 4.5) return { class: 'First Class', color: '#1e8449' };
     if (cgpa >= 3.5) return { class: 'Second Class (Upper)', color: '#196f3d' };
     if (cgpa >= 2.5) return { class: 'Second Class (Lower)', color: '#5dade2' };
@@ -122,12 +122,45 @@ export const getAcademicClass = (cgpa: number, gradingScale: number): { class: s
     if (cgpa >= 1.5) return { class: 'Pass', color: '#eb984e' };
     return { class: 'Fail', color: '#ec7063' };
   } else {
-    // 4.0 scale classification - Using high contrast colors for visibility
+    // 4.0 scale classification
     if (cgpa >= 3.6) return { class: 'First Class', color: '#201e84' };
     if (cgpa >= 3.0) return { class: 'Second Class (Upper)', color: '#e4d726' };
     if (cgpa >= 2.0) return { class: 'Second Class (Lower)', color: '#c1e911' };
     if (cgpa >= 1.5) return { class: 'Third Class', color: '#f5b041' };
     if (cgpa >= 1.0) return { class: 'Pass', color: '#8b0c81' };
     return { class: 'Fail', color: '#f0210a' };
+  }
+};
+
+/**
+ * Converts percentage marks to letter grade based on grading scale
+ * @param marks - Percentage marks (0-100)
+ * @param gradingScale - Grading scale (4.0 or 5.0)
+ * @returns Letter grade
+ */
+export const getGradeFromMarks = (marks: number, gradingScale: number): string => {
+  if (marks < 0 || marks > 100) return '';
+  
+  if (gradingScale === 5.0) {
+    // 5.0 Scale
+    if (marks >= 80) return 'A+';
+    if (marks >= 70) return 'A';
+    if (marks >= 65) return 'B+';
+    if (marks >= 60) return 'B';
+    if (marks >= 55) return 'C+';
+    if (marks >= 50) return 'C';
+    if (marks >= 45) return 'D+';
+    if (marks >= 40) return 'D';
+    return 'F';
+  } else {
+    // 4.0 Scale
+    if (marks >= 80) return 'A';
+    if (marks >= 75) return 'B+';
+    if (marks >= 70) return 'B';
+    if (marks >= 65) return 'C+';
+    if (marks >= 60) return 'C';
+    if (marks >= 55) return 'D+';
+    if (marks >= 50) return 'D';
+    return 'F';
   }
 };

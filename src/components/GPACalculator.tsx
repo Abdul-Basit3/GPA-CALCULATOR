@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Course, Semester } from '../types';
-import { getGradeScale, calculateGPA } from '../utils/calculations';
+import { getGradeScale, calculateGPA, getGradeFromMarks } from '../utils/calculations';
 import '../styles/GPACalculator.css';
 
 interface GPACalculatorProps {
@@ -22,6 +22,9 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
     { id: '1', name: '', credits: 0, grade: '', gradePoint: 0 }
   ]);
   
+  // Track marks for each course
+  const [courseMarks, setCourseMarks] = useState<{ [key: string]: number }>({});
+  
   // Success message visibility
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -35,8 +38,9 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
    * Adds a new empty course row
    */
   const addCourse = () => {
+    const newId = Date.now().toString();
     setCourses([...courses, { 
-      id: Date.now().toString(), 
+      id: newId, 
       name: '', 
       credits: 0, 
       grade: '', 
@@ -50,7 +54,31 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
   const removeCourse = (id: string) => {
     if (courses.length > 1) {
       setCourses(courses.filter(c => c.id !== id));
+      // Remove marks for this course
+      const newMarks = { ...courseMarks };
+      delete newMarks[id];
+      setCourseMarks(newMarks);
     }
+  };
+
+  /**
+   * Updates marks and automatically calculates grade
+   */
+  const updateMarks = (id: string, marks: number) => {
+    // Update marks state
+    setCourseMarks({ ...courseMarks, [id]: marks });
+    
+    // Auto-calculate grade from marks
+    const grade = getGradeFromMarks(marks, gradingScale);
+    const gradePoint = gradeScale[grade] || 0;
+    
+    // Update course with calculated grade
+    setCourses(courses.map(course => {
+      if (course.id === id) {
+        return { ...course, grade, gradePoint };
+      }
+      return course;
+    }));
   };
 
   /**
@@ -102,6 +130,7 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
     onSave(semester);
     setSemesterName('');
     setCourses([{ id: '1', name: '', credits: 0, grade: '', gradePoint: 0 }]);
+    setCourseMarks({});
     
     // Show success message
     setShowSuccess(true);
@@ -134,7 +163,7 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
             <span className="course-number">{index + 1}</span>
             <input
               type="text"
-              placeholder="Course Code"
+              placeholder="Course Name"
               value={course.name}
               onChange={(e) => updateCourse(course.id, 'name', e.target.value)}
             />
@@ -143,18 +172,20 @@ function GPACalculator({ onSave, gradingScale, onNavigate }: GPACalculatorProps)
               placeholder="Credits"
               min="0"
               max="10"
+              step="0.5"
               value={course.credits || ''}
               onChange={(e) => updateCourse(course.id, 'credits', parseFloat(e.target.value) || 0)}
             />
-            <select
-              value={course.grade}
-              onChange={(e) => updateCourse(course.id, 'grade', e.target.value)}
-            >
-              <option value="">Select Grade</option>
-              {Object.keys(gradeScale).map(grade => (
-                <option key={grade} value={grade}>{grade}</option>
-              ))}
-            </select>
+            <input
+              type="number"
+              placeholder="Marks %"
+              min="0"
+              max="100"
+              value={courseMarks[course.id] || ''}
+              onChange={(e) => updateMarks(course.id, parseFloat(e.target.value) || 0)}
+              className="marks-input"
+            />
+            <span className="grade-display">{course.grade || '-'}</span>
             <span className="grade-point">{course.gradePoint.toFixed(1)}</span>
             <button onClick={() => removeCourse(course.id)} className="remove-btn">✕</button>
           </div>

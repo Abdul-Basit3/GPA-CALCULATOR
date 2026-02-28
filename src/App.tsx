@@ -124,7 +124,10 @@ function App() {
           <button className="menu-toggle" onClick={toggleSidebar} aria-label="Toggle menu">
             ☰
           </button>
-          <h1>🎓 Academic Performance Tracker</h1>
+          <div className="header-title">
+            <img src="/images/app-icon.png" alt="GPA Calculator" className="header-icon" />
+            <h1>GPA Calculator</h1>
+          </div>
         </div>
         <nav className="nav-menu desktop-nav">
           <button onClick={() => handleNavigate('dashboard')} className={activeView === 'dashboard' ? 'active' : ''}>Dashboard</button>
